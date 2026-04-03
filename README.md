@@ -13,27 +13,9 @@ Nginx reverse proxy with automated Let's Encrypt SSL certificate issuance and re
 ### Step 1 — Clone the repository
 
 ```bash
-git clone <repo-url> nginx-certbot
+git clone https://github.com/manhtai831/nginx-certbot.git nginx-certbot
 cd nginx-certbot
 ```
-
----
-
-### Step 2 — Configure environment
-
-Create a `.env` file:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-COMPOSE_NAME=app        # Prefix used for container names
-```
-
----
 
 ### Step 3 — First-time setup & obtain SSL certificate
 
@@ -182,5 +164,20 @@ deny 5.6.7.0/24;
 Then reload nginx:
 
 ```bash
-docker compose exec nginx nginx -s reload
+docker compose exec app_nginx nginx -s reload
+```
+
+## Change network
+```
+sed -i '' 's|nginx_certbot_default|nginx_certbot_default_new|g' docker-compose.yml
+```
+
+## Move ssl.conf to up
+```
+cp nginx/conf.d/templates/ssl.conf nginx/conf.d/ssl.conf 
+```
+
+## Create user basic auth
+```
+docker run --rm httpd:2.4-alpine htpasswd -nbB user2 pass2 >> nginx/conf.d/basic-auths/.htpasswd
 ```
