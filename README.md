@@ -178,6 +178,16 @@ cp nginx/conf.d/templates/ssl.conf nginx/conf.d/ssl.conf
 ```
 
 ## Create user basic auth
+- Make create new user.
 ```
 docker run --rm httpd:2.4-alpine htpasswd -nbB user2 pass2 >> nginx/conf.d/basic-auths/.htpasswd
+```
+- Enabled basic auth in `nginx/conf.d/basic-auth.conf`.
+```
+nano nginx/conf.d/basic-auth.conf
+```
+
+- Reload nginx.
+```
+docker compose exec nginx nginx -t && docker compose exec nginx nginx -s reload
 ```
